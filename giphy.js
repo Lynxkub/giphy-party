@@ -1,29 +1,23 @@
 
 let $keyword=$("#keyword");
-const imgArea=document.querySelector("#imgArea");
+const $imgArea=$("#imgArea");
 
 
-$("#submit").on("click", function(e){
+$("#submit").on("click", async function(e){
     e.preventDefault();
-    request();
-    
-})
-
-async function request(){
     let keyWord=$("#keyword").val();
     let response= await axios.get("http://api.giphy.com/v1/gifs/search", {params:{q: keyWord, api_key:"qemeAgZSw9Zf1fZYe5Lz07QX6FIThkAI"}})
-    
-   createGif(response.data.data[0].url)
-   $("#keyword").val("")
-    
-    }
+    $("#keyword").val("");
+    createGif(response.data);
+});
+
+
 
 function createGif(gif){
-    let img=document.createElement("img");
-    img.setAttribute("src", gif);
-    img.setAttribute("sameSite", "None")
-    img.classList.add("w-100");
-    imgArea.append(img);
+   let $newDiv = $("<div>", {class: "col-md-4 col-12 mb-4"})
+   let $newGif = $("<img>", {src : gif.data[0].images.original.url});
+   $newDiv.append($newGif);
+   $imgArea.append($newDiv);
     
 }
 
